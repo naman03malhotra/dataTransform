@@ -408,11 +408,13 @@ var displayCards = function (myData)
   Fetch DB as soon as page loads
 
   $(document).ready(function() 
-  {    
+  { 
+    $(".mysqlBind").html('');
+    console.log('Local DB loaded');
     fetchDb(displayCards);
   });
-*/
 
+*/
 /*
  Fetch DB when GO button is clicked
 */
