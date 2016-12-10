@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Class sqlLogin extending class TwiiterAPiExchange
+ * Class sqlLogin 
  *
- * Fetch Tweets using twitter API
+ * Fetch data from DB
  *
  */
 
@@ -32,11 +32,7 @@ class sqlLogin
 
 	
 	
-	/**
-	 * function for fetching tweets
-	 * @param string $hashtag; takes hashtag that will be searched
-	 * @return array with tweets that is retweeted at least once
-	 */
+
 	
 	public function processQuery($username,$password,$portAndIp,$query,$db) 
 	{
@@ -113,15 +109,15 @@ class sqlLogin
        	 	$this->db = $row['Database'];
        	 	$query = 'SHOW TABLES';
 
-       	 	//$query = 'SHOW TABLES IN '.$row['Database'];
+       	 	
        	 	$resultx = $this->processQuery($this->username,$this->password,$this->portAndIp,$query,$this->db);
        	 	$colName = 'Tables_in_'.$row['Database'];
        	 	$count2 = 0;
        	 	foreach($resultx as $key => $rowx)
-       	 	//while($rowx = mysqli_fetch_assoc($resultx))
+       	 	
        	 	{
        	 		$rowx['table'] = $rowx[$colName];
-       	 		//unset($rowx[$colName]);
+       	 		
        	 		
        	 		array_push($final_result['data'][$count], $rowx);
 
@@ -130,7 +126,7 @@ class sqlLogin
 
        	 		foreach ($resultx2 as $key => $rowx2) 
        	 		{
-       	 			//print_r($rowx2['Field']);
+       	 			
        	 			array_push($final_result['data'][$count][$count2], $rowx2['Field']);
        	 		}
        	 		$count2++;

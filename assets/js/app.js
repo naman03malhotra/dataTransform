@@ -411,6 +411,7 @@ var displayCards = function (myData)
     fetchDb(displayCards);
   });
 */
+
 /*
  Fetch DB when GO button is clicked
 */
@@ -448,27 +449,9 @@ var displayCards = function (myData)
 
 
 
-/*
- Fetch Tweets if scrolled to bottom
-
-
-$(window).scroll(function() 
-{
-    if ($(window).scrollTop() + $(window).height() == $(document).height()) 
-    {
-        // send mode = 0, stating call is made by scrolling down, i.e work on same hashtag
-        fetchTweets(displayCards,'0');
-    }
-});
-
-*/
-
 
 $(document).ready(function(){
     $(".nav-tabs a").click(function(){
         $(this).tab('show');
     });
 });
-
-
-

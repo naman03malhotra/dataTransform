@@ -286,7 +286,7 @@
             </div>
             <div id="collapseOne" class="panel-collapse collapse">
               <div class="panel-body">
-
+                Obj1
               </div>
             </div>
           </div>
@@ -300,7 +300,7 @@
             </div>
             <div id="collapseTwo" class="panel-collapse collapse">
               <div class="panel-body">
-
+              Obj2
               </div>
             </div>
           </div>
@@ -394,7 +394,7 @@
       </div><!-- /.modal-dalog -->
     </div><!-- /.modal -->
 <script>
-                  var listOfFilesUploaded = [];
+            var listOfFilesUploaded = [];
 
                          function _(el){
                            if (document.getElementById(el) != null) 

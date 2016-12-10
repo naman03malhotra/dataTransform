@@ -412,6 +412,7 @@ var displayCards = function (myData)
     fetchDb(displayCards);
   });
 */
+
 /*
  Fetch DB when GO button is clicked
 */
@@ -449,31 +450,12 @@ var displayCards = function (myData)
 
 
 
-/*
- Fetch Tweets if scrolled to bottom
-
-
-$(window).scroll(function() 
-{
-    if ($(window).scrollTop() + $(window).height() == $(document).height()) 
-    {
-        // send mode = 0, stating call is made by scrolling down, i.e work on same hashtag
-        fetchTweets(displayCards,'0');
-    }
-});
-
-*/
-
 
 $(document).ready(function(){
     $(".nav-tabs a").click(function(){
         $(this).tab('show');
     });
 });
-
-
-
-
 },{"NProgress":2,"bootstrap":3,"html-tweet":16,"jquery":17}],2:[function(require,module,exports){
 /* NProgress, (c) 2013, 2014 Rico Sta. Cruz - http://ricostacruz.com/nprogress
  * @license MIT */
