@@ -394,6 +394,8 @@
       </div><!-- /.modal-dalog -->
     </div><!-- /.modal -->
 <script>
+
+// Work in progress, upload file code
             var listOfFilesUploaded = [];
 
                          function _(el){

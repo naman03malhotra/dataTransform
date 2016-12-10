@@ -54,9 +54,9 @@ switch($route)
 				$db = '';					
 
 			
-			// Object that will interact with Twitter Class
+			// Object that will interact with DB
 			$sqlObject = new sqlLogin();
-			// Fetch Tweets
+			// Fetch Data
 			$result = $sqlObject->displayData($username,$password,$portAndIp,$query,$db);
 			print_r($result);
 			break;
