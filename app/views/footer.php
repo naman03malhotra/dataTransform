@@ -1,5 +1,5 @@
    <footer>
-   	<center><p>&copy; Busigence 2016</p></center>
+   	<center><p>&copy; Intelli 2016</p></center>
    	
    </footer>
    

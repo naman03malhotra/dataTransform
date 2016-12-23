@@ -58,7 +58,7 @@
       <div class="container">
         <div class="navbar-header">
          
-          <a class="navbar-brand" href="#">Data Analyzer</a>
+          <a class="navbar-brand" href="#">Intelli Data Analyzer</a>
       </div>
       <div id="navbar" class="navbar-collapse collapse">
           

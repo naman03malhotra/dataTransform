@@ -23,10 +23,10 @@ switch($route)
 	case '/': 
 		// Some SEO stuff	
 		$seo = array(
-			'title' => 'Busigence Challenge',
-			'keywords' => 'Busigence, twitter hashtag search, sentiment analysis, twitter app',
-			'description' => 'This App allows you to .........',
-			'site_name' => 'https://naman-malhotra.rhcloud.com/busigence/'
+			'title' => 'Intelli',
+			'keywords' => 'Intelli, twitter hashtag fetch, sentiment analysis, CSV, twitter app',
+			'description' => 'This App allows you to map and merge data from different sources',
+			'site_name' => 'https://letsconnect.co/data/'
 			);
 
 		$view = "index.php";
@@ -45,11 +45,11 @@ switch($route)
 				$portAndIp = $_POST['portAndIp']; // fetch portAndIp if posted
 
 			if(isset($_POST['query']))
-				$query = $_POST['query']; // fetch portAndIp if posted
+				$query = $_POST['query']; // fetch Query if posted
 			else
 				$query = '';
 			if(isset($_POST['db']))
-				$db = $_POST['db']; // fetch portAndIp if posted
+				$db = $_POST['db']; // fetch DB if posted
 			else
 				$db = '';					
 
@@ -57,7 +57,10 @@ switch($route)
 			// Object that will interact with DB
 			$sqlObject = new sqlLogin();
 			// Fetch Data
-			$result = $sqlObject->displayData($username,$password,$portAndIp,$query,$db);
+			if($db=='')
+				$result = $sqlObject->displayData($username,$password,$portAndIp,$query,$db);
+			else
+				$result = $sqlObject->queryToArray($username,$password,$portAndIp,$query,$db);
 			print_r($result);
 			break;
 
@@ -77,7 +80,7 @@ switch($route)
 			// Object that will interact with Twitter Class
 			$twitterObject = new Twitter($settings);
 			// Fetch Tweets
-			$tweets=$twitterObject->getMyTweets($hashtag);
+			$tweets = $twitterObject->getMyTweets($hashtag);
 			print_r($tweets);
 			break;
 

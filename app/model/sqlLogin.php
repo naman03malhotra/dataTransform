@@ -22,17 +22,63 @@ class sqlLogin
 	 */
 	public function __construct() 
 	{
-		$this->username = "admin58tfrzD";
-		$this->password = "5Et_ZFEqUWg-";
-		$this->portAndIp = "127.13.163.2:3306";
+		if(!isset($_SESSION['username']))
+			$this->username = "admin58tfrzD";
+		else
+			$this->username = $_SESSION['username'];
+
+		if(!isset($_SESSION['password']))
+			$this->password = "5Et_ZFEqUWg-";
+		else
+			$this->password = $_SESSION['password'];
+
+		if(!isset($_SESSION['portAndIp']))
+			$this->portAndIp = "127.13.163.2:3306";
+		else
+			$this->portAndIp = $_SESSION['portAndIp'];
+
 		$this->query = "SHOW DATABASES";
+
 		$this->db = "";
 	}
 
 
 	
 	
+	public function queryToArray($username,$password,$portAndIp,$query,$db)
+	{
+		if($query!='')
+			$this->query = $query; 
+		if($db!='')
+			$this->db = $db;
+		if($username!='')
+			$this->username = $username;
+		if($password!='')
+			$this->password = $password;
+		if($portAndIp!='')
+			$this->portAndIp = $portAndIp;
 
+		$result = $this->processQuery($this->username,$this->password,$this->portAndIp,$this->query,$this->db);
+
+		
+		$final_result = array();
+
+		//if($result)
+		//	$final_result['res'] =TRUE;
+		
+		
+		$final_result['data'] = array();
+
+		foreach ($result as $key => $row) 
+       	 		{
+       	 			
+       	 			array_push($final_result['data'],$row);
+       	 		}
+       	return json_encode($final_result);
+
+
+
+	}
 	
 	public function processQuery($username,$password,$portAndIp,$query,$db) 
 	{
@@ -86,11 +132,20 @@ class sqlLogin
 		if($db!='')
 			$this->db = $db;
 		if($username!='')
-			$this->username = $username;
+			{
+				$this->username = $username;
+				$_SESSION['username'] = $username;
+			}
 		if($password!='')
-			$this->password = $password;
+			{
+				$this->password = $password;
+				$_SESSION['password'] = $password;
+			}
 		if($portAndIp!='')
-			$this->portAndIp = $portAndIp;
+			{
+				$this->portAndIp = $portAndIp;
+				$_SESSION['portAndIp'] = $portAndIp;
+			}
 
 		$result = $this->processQuery($this->username,$this->password,$this->portAndIp,$this->query,$this->db);
 

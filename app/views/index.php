@@ -189,26 +189,54 @@
 
     <div class="row">
       <div class="col-md-3">
-          <div><button class="btn btn-default btn-block">D1</button></div>
+          <div><button id="target1" ondrop="drop_handler(event,1);" ondragover="dragover_handler(event);" class="btn btn-default btn-block">D1</button></div>
           <br>
           <br>
-          <div><button class="btn btn-default btn-block">D2</button></div>
+          <div><button id="target2" ondrop="drop_handler(event,2);" ondragover="dragover_handler(event);" class="btn btn-default btn-block">D2</button></div>
       </div>
       <div class="col-md-6">
+        <br>
+        <br>
+        <div><button class="btn btn-default btn-block"  id="join_hit">Join</button></div>
+        <br>
+        <br>
+
+        <div class="row">
+
+          <div class="col-md-12">
+            <select  id="what_sort" class="form-control">
+              <option value="" style="display:none">Select Transformation</option>
+              <option value="asc">Sort Asc</option>
+              <option value="desc">Sort Desc</option>
+            </select>
+          </div>
           <br>
           <br>
-          <div><button class="btn btn-default btn-block">Join</button></div>
+          <div class="col-md-12">
+            <select  id="what_col" class="form-control" style="display: none;">
+              <option value="" style="display:none">Select Coloumn</option>
+
+            </select>
+          </div>
           <br>
+
           <br>
-          <div><button class="btn btn-default btn-block">Transformation</button></div>
-          <br>
-          <br>
-          <div><button class="btn btn-default btn-block">Output Filetype</button></div>
-          <br>
-          <br>
-          <br>
-          <div><button class="btn btn-primary btn-block">Run the Mapping</button></div>
+
+
+        </div>          
+        <br>
+
+        <div><button class="btn btn-primary btn-block" id="mapping_hit">Run Mapping</button></div>
         
+      </div>
+      <div class="col-md-3">
+        
+         <select id="select_primary" class="form-control" style="display: none;">
+                <option value="" style="display:none">Select Primary</option> 
+                <option value="full">Full Join</option>               
+         </select>
+
+
       </div>
       
     </div>
@@ -233,7 +261,7 @@
         <div class="modal-dialog modal-md">
           <div class="modal-header">
             <a  data-dismiss="modal" class="close"  aria-label="Close"><p style="color:white !important;opacity:1;text-shadow:none;font-weight:normal">x</p></a>
-            <h4 class="modal-title" id="myModalLabel">Upload CSV</h4>
+            <h4 class="modal-title" id="myModalLabel" style="color: whitesmoke;">Upload CSV</h4>
           </div>
           <div class="modal-content text-center">
             <div class="modal-body">
@@ -257,6 +285,49 @@
           </div>
 
           <div class="bg-primary text-center" id="result-yt2">
+
+          </div>
+
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dalog -->
+    </div><!-- /.modal -->
+
+
+    <div id="myPlotData" class="modal fade in">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-header">
+          <a  href="" data-dismiss="modal" class="close"  aria-label="Close"><p style="color:white !important;opacity:1;text-shadow:none;font-weight:normal">x</p></a>
+          <h4 class="modal-title" id="myModalLabel" style="color: whitesmoke;">Preview / Download</h4>
+        </div>
+        <div class="modal-content text-center">
+          <div class="modal-body plot_data">
+              <br>
+              <div class="dwl-data text-center row">
+              
+                <div class="col-md-4">
+                    <select id="file_export" class="form-control" required>
+                                <option value="" style="display:none">Select Format To Download</option>
+                                <option value="sql">SQL</option>
+                                <option value="csv">CSV</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                   <a class="btn btn-primary my-btn" value="Upload File" id="down_hit" style="display: none;" download><span class="fa fa-download"></span> Download</a>
+                </div>
+                <div class="col-md-4"><a href="" id="newMap_hit" class="btn btn-success" style="display: none;">New Map</a> </div>
+                  
+              </div>
+              <br>
+              <br>
+
+          <div class="showData table-responsive text-left" id="showData"> Data will be displayed here </div>
+
+
+            <br>
+
+          </div>
+
+          <div class="bg-primary text-center" id="result-prev">
 
           </div>
 

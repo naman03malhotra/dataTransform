@@ -1,7 +1,7 @@
 {
   "name": "intelli",
   "version": "1.0.0",
-  "description": "busigence Challenge",
+  "description": "Data Transform",
   "main": "app/media/js/app.js",
   "scripts": {
     "build": "browserify assets/js/app.js -o bundle.js",

@@ -5,6 +5,9 @@
 */
 $ = jQuery = require('jquery');
 
+
+
+
 /*
 Nprogress loading bar
 */
@@ -60,7 +63,7 @@ var sentiText;
 /*
 Card template that will be appended
 */
-
+/*
 var cardTemplate = '<div class="col-md-4">'+
                     '<div class="card text-center">'+
                       '<div class="card-content">'+
@@ -80,6 +83,8 @@ var cardTemplate = '<div class="col-md-4">'+
                     '</div>'+
                    '</div>';
 
+*/
+
  var collapseTemplate = '<div class="panel panel-default">'+
                           '<div class="panel-heading">'+
                             '<h4 class="panel-title">'+
@@ -93,8 +98,21 @@ var cardTemplate = '<div class="col-md-4">'+
                         '</div>'+
                       '</div>';
 
+  var collapseTemplate_drag = '<div class="panel panel-default">'+
+                                '<div class="panel-heading">'+
+                                  '<h4 class="panel-title">'+
+                                    '<a class="accordion-toggle" draggable="true" id="dragx" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">'+                               
+                                    '</a>'+
+                                  '</h4>'+
+                                '</div>'+
+                                '<div id="collapseOne" class="panel-collapse collapse">'+
+                                  '<div class="panel-body">'+
+                                  '</div>'+
+                              '</div>'+
+                            '</div>';                     
+
  var radioTemplate = '<div class="funkyradio-default">'+
-                          '<input type="checkbox" name="radio" id="radio1" />'+
+                          '<input type="radio" name="radio" id="radio1" />'+
                           '<label class="radLabel" for="radio1"></label>'+
                         '</div>';
 
@@ -288,7 +306,7 @@ var fetchDb = function(callback,mode)
 
 {  
        
-        // Picks value from hashtag input    
+        // Picks value from inputs    
         var username = $('#username').val();      
         var password = $('#password').val(); 
         var portAndIp = $('#portAndIp').val();      
@@ -333,7 +351,7 @@ var fetchDb = function(callback,mode)
         
           {
             xmlhttp.open("POST","sqlLogin",true);
-            xmlhttp.send(formData); // send hashtag and mode.
+            xmlhttp.send(formData); // send inputs and mode.
           }
           
   }
@@ -369,11 +387,13 @@ var displayCards = function (myData)
           var count=0;
           while(myData.data[i][count]!=undefined)
           {
-              var colCard2 = $(collapseTemplate);
+              var colCard2 = $(collapseTemplate_drag);
               var tableName = myData.data[i][count].table;
               colCard2.find('.accordion-toggle').attr("href","#tbLayer"+i+'-'+count);
+              colCard2.find('.accordion-toggle').attr("id","tbLayerId"+i+'-'+count);
               colCard2.find('.accordion-toggle').attr("data-parent","#accordion"+i);
               colCard2.find('.accordion-toggle').html(' '+tableName);
+              colCard2.find('.accordion-toggle').attr('ondragstart', 'dragstart_handler(\''+dbName+'\',\''+tableName+'\',event)');
               colCard2.find('.panel-body').html('<div class="funkyradio"></div>');
           
               colCard2.find('.panel-collapse').attr("id","tbLayer"+i+'-'+count);
@@ -392,7 +412,7 @@ var displayCards = function (myData)
                     radioCard.find('#radio1').attr("id","fLayer"+i+'-'+count+'-'+count2);
                     radioCard.find('.radLabel').html(fieldName);                
                     radioCard.find('.radLabel').attr("for","fLayer"+i+'-'+count+'-'+count2);
-                    radioCard.find('.radLabel').attr('onClick', 'set_primary_key(\''+fieldName+'\','+count+','+count2+')');
+                    radioCard.find('.radLabel').attr('onClick', 'set_primary_key(\''+fieldName+'\',\''+dbName+'\',\''+tableName+'\')');
 
 
                     $(".funkyradio").last().append(radioCard);
@@ -403,9 +423,452 @@ var displayCards = function (myData)
       }
 
 }
+var results_all = 'temp';
+
+ $("#join_hit").click(function()
+  {
+   //alert('Im hit');
+   //console.log(d1);
+   var join_method = $('#select_primary').val();
+   if(join_method == "")
+   {
+      alert('Please select a join method.');
+      return;
+   }
+
+  
+     d1x = d1.split(",");
+     d2x = d2.split(",");
+  
+
+
+      // build query
+      if(join_method != 'full')
+          var query = 'create table '+d1x[0]+'.'+d1x[1]+d2x[1]+' (PRIMARY KEY('+join_method+')) as select * from '+d1x[0]+'.'+d1x[1]+' inner join '+d2x[0]+'.'+d2x[1]+' using('+join_method+')';
+      else
+          var query = 'create table '+d1x[0]+'.'+d1x[1]+d2x[1]+' as select * from '+d1x[0]+'.'+d1x[1]+' inner join '+d2x[0]+'.'+d2x[1];
+
+         
+      console.log(query);
+
+        // create FormData
+        var formData = new FormData();
+        //formData.append('db',db);        
+        formData.append('query',query);
+        
+
+        if (window.XMLHttpRequest)
+            {
+              xmlhttp = new XMLHttpRequest(); // code for IE7+, Firefox, Chrome, Opera, Safari
+            }
+          else
+            {
+              xmlhttp = new ActiveXObject("Microsoft.XMLHTTP"); // code for IE6, IE5
+            }
+
+        xmlhttp.onreadystatechange = function()
+          {
+                if (xmlhttp.readyState == 1)
+                {                                    
+                   NProgress.start();  // Initiate loadingBar
+                   NProgress.set(0.6);                                   
+                }
+              else if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+                {                                    
+                    response=(xmlhttp.responseText); // parsing JSON string obtained
+                    console.log(JSON.parse(response));
+                    NProgress.done(); 
+
+
+
+                   
+                      query = 'SHOW COLUMNS from '+d1x[0]+'.'+d1x[1]+d2x[1];
+
+                       
+                      console.log(query);
+
+                      // create FormData
+                      var formData = new FormData();
+                      //formData.append('db',db);        
+                      formData.append('query',query);
+                      
+
+                      if (window.XMLHttpRequest)
+                          {
+                            xmlhttp = new XMLHttpRequest(); // code for IE7+, Firefox, Chrome, Opera, Safari
+                          }
+                        else
+                          {
+                            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP"); // code for IE6, IE5
+                          }
+
+                      xmlhttp.onreadystatechange = function()
+                        {
+                              if (xmlhttp.readyState == 1)
+                              {                                    
+                                 //NProgress.start();  // Initiate loadingBar
+                                 //NProgress.set(0.6);                                   
+                              }
+                            else if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+                              {                                    
+                                  response=JSON.parse(xmlhttp.responseText); // parsing JSON string obtained
+                                  console.log(response);
+                                  plot_cols(response);
+                                  //NProgress.done();                              
+                              }
+                         }
+                      
+                        {
+                          xmlhttp.open("POST","sqlLogin",true);
+                          xmlhttp.send(formData); // send inputs and mode.
+                        }
+
+
+
+
+
+
+
+
+                
+                }
+           }
+        
+          {
+            xmlhttp.open("POST","sqlLogin",true);
+            xmlhttp.send(formData); // send inputs and mode.
+          }
+
+
+
+  });
+
+
+
+ var plot_cols = function(dataPlot) 
+ {
+    $('#what_col').show();
+    dataPlot.data.forEach(function(dat){
+
+       $('#what_col').append($('<option>').text(dat.Field).attr('value', dat.Field));
+
+    });
+
+ }
+
+
+
+  $("#mapping_hit").click(function()
+  {
+
+    var what_sort = $('#what_sort').val();
+    console.log(what_sort);
+    if(what_sort == "")
+    {
+      alert('Please select a sorting method');
+      return;
+    }
+
+    var what_col = $('#what_col').val();
+    if(what_col == "")
+    {
+      alert('Please select column.');
+      return;
+    }
+    console.log(what_col);
+
+
+
+    // build query   
+    var query = 'select * FROM '+d1x[0]+'.'+d1x[1]+d2x[1]+' ORDER BY '+what_col+' '+what_sort+' LIMIT 10';
+    console.log(query);
+
+        // create FormData
+        var formData = new FormData();
+        //formData.append('db',db);        
+        formData.append('query',query);
+        
+
+        if (window.XMLHttpRequest)
+            {
+              xmlhttp = new XMLHttpRequest(); // code for IE7+, Firefox, Chrome, Opera, Safari
+            }
+          else
+            {
+              xmlhttp = new ActiveXObject("Microsoft.XMLHTTP"); // code for IE6, IE5
+            }
+
+        xmlhttp.onreadystatechange = function()
+          {
+                if (xmlhttp.readyState == 1)
+                {                                    
+                   NProgress.start();  // Initiate loadingBar
+                   NProgress.set(0.6);                                   
+                }
+              else if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+                {                                    
+                    response = JSON.parse(xmlhttp.responseText); // parsing JSON string obtained
+                    console.log(response);
+                    plot(response);
+                    //callback(ev,response);
+                    //ev.dataTransfer.setData("text/plain", response);
+                    //ev.dataTransfer.effectAllowed = "move";
+                    
+                    //ev.dropEffect = "move";
+                    NProgress.done();
+                }
+           }
+        
+          {
+            xmlhttp.open("POST","sqlLogin",true);
+            xmlhttp.send(formData); // send inputs and mode.
+          }
+
+
+
+   //alert('Im hit');
+   //console.log(d1);
+
+   //var results_all = leftJoin(d1,d2,'id','id');
+   //var sorted = results_all.sortOn("name");
+   
+   //var sorted = results_all.sort(keysrt('name'));
+    //console.log(sorted);
+
+  });
+
+
+
+  var plot = function(dataPlot) 
+
+  {
+      // EXTRACT VALUE FOR HTML HEADER. 
+      // ('Book ID', 'Book Name', 'Category' and 'Price')
+      dataPlot = dataPlot.data;
+      //console.log(dataPlot);
+      $('#myPlotData').modal('show');
+
+       var col = [];
+        for (var i = 0; i < dataPlot.length; i++) {
+            for (var key in dataPlot[i]) {
+                if (col.indexOf(key) === -1) {
+                    col.push(key);
+                }
+            }
+        }
+
+        // CREATE DYNAMIC TABLE.
+        var table = document.createElement("table");
+        $(table).addClass('table table-striped table-hover table-condensed');
+
+        // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
+
+        var tr = table.insertRow(-1);                   // TABLE ROW.
+
+        for (var i = 0; i < col.length; i++) {
+            var th = document.createElement("th");      // TABLE HEADER.
+            th.innerHTML = col[i];
+            tr.appendChild(th);
+        }
+
+        // ADD JSON DATA TO THE TABLE AS ROWS.
+        for (var i = 0; i < dataPlot.length; i++) {
+
+            tr = table.insertRow(-1);
+
+            for (var j = 0; j < col.length; j++) {
+                var tabCell = tr.insertCell(-1);
+                tabCell.innerHTML = dataPlot[i][col[j]];
+            }
+        }
+
+        // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
+        console.log(table);
+        var divContainer = document.getElementById("showData");
+        divContainer.innerHTML = "";
+        divContainer.appendChild(table);
+
+
+
+  }
+
+
+  $("#file_export").change(function()
+  {
+      
+      var file_export = $('#file_export').val();
+      console.log(file_export);
+
+
+      var what_sort = $('#what_sort').val();
+      var what_col = $('#what_col').val();
+      
+
+
+      var file_export_name = '/var/lib/openshift/54ad7a93fcf933b460000067/app-root/runtime/repo/intelli/export/'+d1x[0]+'-'+d1x[1]+d2x[1]+what_sort+what_col+'.'+file_export;
+    // build query
+    if(file_export=='sql')   
+      var query = 'SELECT * INTO OUTFILE \''+file_export_name+'\' FROM '+d1x[0]+'.'+d1x[1]+d2x[1]+' ORDER BY '+what_col+' '+what_sort;
+    else
+      var query = 'SELECT * INTO OUTFILE \''+file_export_name+'\' FIELDS TERMINATED BY \',\' OPTIONALLY ENCLOSED BY \'"\' LINES TERMINATED BY \'\\r\\n\' FROM '+d1x[0]+'.'+d1x[1]+d2x[1]+' ORDER BY '+what_col+' '+what_sort;
+
+      console.log(query);
+
+        // create FormData
+        var formData = new FormData();
+        //formData.append('db',db);        
+        formData.append('query',query);
+        
+
+        if (window.XMLHttpRequest)
+            {
+              xmlhttp = new XMLHttpRequest(); // code for IE7+, Firefox, Chrome, Opera, Safari
+            }
+          else
+            {
+              xmlhttp = new ActiveXObject("Microsoft.XMLHTTP"); // code for IE6, IE5
+            }
+
+        xmlhttp.onreadystatechange = function()
+          {
+                if (xmlhttp.readyState == 1)
+                {                                    
+                   //NProgress.start();  // Initiate loadingBar
+                  // NProgress.set(0.6);                                   
+                }
+              else if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+                { 
+
+                    $('#down_hit').show();
+                    $('#newMap_hit').show();
+                    $('#down_hit').attr('href','export/'+d1x[0]+'-'+d1x[1]+d2x[1]+what_sort+what_col+'.'+file_export);                                   
+                    response = JSON.parse(xmlhttp.responseText); // parsing JSON string obtained
+                    console.log(response);
+                 
+                }
+           }
+        
+          {
+            xmlhttp.open("POST","sqlLogin",true);
+            xmlhttp.send(formData); // send inputs and mode.
+          }
+
+
+
+  });
+/*
+ function json2array(json){
+    var result = [];
+    var keys = Object.keys(json);
+    keys.forEach(function(key){
+        result.push(json[key]);
+    });
+    return result;
+}
+*/
+
+/*
+function keysrt(key) {
+  return function(a,b){
+   if (a[key] > b[key]) return -1;
+   if (a[key] < b[key]) return 1;
+   return 0;
+  }
+}
+
+
+ Array.prototype.sortOn = function(key){
+    this.sort(function(a, b){
+        if(a[key] < b[key]){
+            return -1;
+        }else if(a[key] > b[key]){
+            return 1;
+        }
+        return 0;
+    });
+}
+
+
+if (!Array.prototype.joinWith) {
+    +function () {
+        Array.prototype.joinWith = function(that, by, select, omit) {
+            var together = [], length = 0;
+            if (select) select.map(function(x){select[x] = 1;});
+            function fields(it) {
+                var f = {}, k;
+                for (k in it) {
+                    if (!select) { f[k] = 1; continue; }
+                    if (omit ? !select[k] : select[k]) f[k] = 1;
+                }
+                return f;
+            }
+            function add(it) {
+                var pkey = '.'+it[by], pobj = {};
+                if (!together[pkey]) together[pkey] = pobj,
+                    together[length++] = pobj;
+                pobj = together[pkey];
+                for (var k in fields(it))
+                    pobj[k] = it[k];
+            }
+            this.map(add);
+            that.map(add);
+            return together;
+        }
+    }();
+}
+
+ function leftJoin(leftTable, rightTable, leftId, rightId) {
+  var joinResults = [];
+
+  _.forEach(leftTable, function(left) {
+          var findBy = {};
+      findBy[rightId] = left[leftId];
+
+      var right = _.find(rightTable, findBy),
+          result = _.merge(left, right);
+
+      joinResults.push(result);
+  })
+
+  return joinResults;
+}
+*/
+
+
+/*
+function inner_join(a, b, keys, select) {
+  output = [];
+ 
+  second = [];
+  while(row_b = b()) {
+    second[second.length] = row_b;
+  }
+ 
+  var idx = 0;
+  while(row_a = a()) {
+    $.each(second, function(i, row_b) {
+      if (row_a[keys[0]] === row_b[keys[1]]) {
+        var new_row = {};
+ 
+        $.each(select, function(k, col) {
+          // cheat here for simplicity - should handle aliasing
+          new_row[col] =
+            (row_a[col] ? row_a[col] : row_b[col])
+        })
+ 
+        output[idx++] = new_row;
+      }
+    })
+  }
+ 
+  return s({from: output})
+}
+*/
   
 /*
   Fetch DB as soon as page loads
+
+*/
 
   $(document).ready(function() 
   { 
@@ -413,8 +876,6 @@ var displayCards = function (myData)
     console.log('Local DB loaded');
     fetchDb(displayCards);
   });
-
-*/
 /*
  Fetch DB when GO button is clicked
 */
