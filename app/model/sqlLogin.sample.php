@@ -23,17 +23,17 @@ class sqlLogin
 	public function __construct() 
 	{
 		if(!isset($_SESSION['username']))
-			$this->username = "admin58tfrzD";
+			$this->username = "";
 		else
 			$this->username = $_SESSION['username'];
 
 		if(!isset($_SESSION['password']))
-			$this->password = "5Et_ZFEqUWg-";
+			$this->password = "";
 		else
 			$this->password = $_SESSION['password'];
 
 		if(!isset($_SESSION['portAndIp']))
-			$this->portAndIp = "127.13.163.2:3306";
+			$this->portAndIp = "";
 		else
 			$this->portAndIp = $_SESSION['portAndIp'];
 
