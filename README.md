@@ -44,8 +44,7 @@ Enable watch mode for browserify builds (Automatically builds, if there is any c
 ```
 $ npm run watch
 ```
-- Add your twitter API keys in  ``` app/config/config-twitter.sample.php ``` and rename it to ```config-twitter.php```
-- Add your HPE havenOnDemand keys in ``` assets/js/sentiment.sample.js ``` and rename it to ```sentiment.js```
+- Add your default database credentials in ``` app/model/sqlLogin.sample.php ``` and rename it to ```sqlLogin.php```
 
 
 
