@@ -4,7 +4,7 @@ This App allows you to merge and transform data using different formats. For Exa
 
 # Live Demo
 
-  [https://letsconnect.co/data/] (https://letsconnect.co/data/)
+  [https://letsconnect.co/intelli/] (https://letsconnect.co/intelli/)
 
 # Features
 - Material UI.
