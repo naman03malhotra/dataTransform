@@ -4,7 +4,7 @@ This App allows you to merge and transform data using different formats. For Exa
 
 # Live Demo
 
-  [https://letsconnect.co/intelli/] (https://letsconnect.co/intelli/)
+  [http://letsconnct-port-letsconnect.193b.starter-ca-central-1.openshiftapps.com/intelli/] (http://letsconnct-port-letsconnect.193b.starter-ca-central-1.openshiftapps.com/intelli/)
 
 # Features
 - Material UI.
